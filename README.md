@@ -5,9 +5,9 @@
 <h1 align="center">Task Manager</h1>
 
 <p align="center">
-  <img src="https://img.shields.io/github/stars/Suzuya4w/Task-Manager?style=for-the-badge" alt="Total Issues">
-  <img src="https://img.shields.io/github/issues/Suzuya4w/Task-Manager?style=for-the-badge">
-  <img src="https://img.shields.io/github/license/Suzuya4w/Task-Manager?style=for-the-badge" alt="License">
+  <img src="https://img.shields.io/github/stars/Suzuya4w/Task-Manager-Laravel?style=for-the-badge" alt="Total Issues">
+  <img src="https://img.shields.io/github/issues/Suzuya4w/Task-Manager-Laravel?style=for-the-badge">
+  <img src="https://img.shields.io/github/license/Suzuya4w/Task-Manager-Laravel?style=for-the-badge" alt="License">
 </p>
 
 ## Introduction
