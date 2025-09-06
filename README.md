@@ -26,7 +26,7 @@ Task Manager is an open-source Laravel application designed to simplify the proc
 git clone https://github.com/Suzuya4w/Task-Manager-Laravel.git
 ```
 ```
-cd Task-Manager
+cd Task-Manager-Laravel
 ```
 
 ### Step 2: Install Dependencies
