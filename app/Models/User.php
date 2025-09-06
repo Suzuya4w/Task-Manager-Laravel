@@ -90,4 +90,20 @@ class User extends Authenticatable
     {
         return $this->belongsToMany(Project::class, 'project_teams', 'user_id', 'project_id');
     }
+    // Add this method to get all projects the user has access to (both owned and shared)
+public function accessibleProjects()
+{
+    // Get projects where user is owner OR team member
+    return Project::where('user_id', $this->id)
+                ->orWhereHas('users', function($query) {
+                    $query->where('user_id', $this->id);
+                })
+                ->get();
+}
+
+// Update the projectMembers relationship to match your pivot table structure
+public function sharedProjects()
+{
+    return $this->belongsToMany(Project::class, 'project_teams', 'user_id', 'project_id');
+}
 }

@@ -10,7 +10,13 @@ class TaskController extends Controller
 {
     public function index(Project $project)
     {
-        $tasks = $project->tasks()->get()->groupBy('status');
+        // Get tasks grouped by status
+        $tasks = [
+            'to_do' => $project->tasks()->where('status', 'to_do')->get(),
+            'in_progress' => $project->tasks()->where('status', 'in_progress')->get(),
+            'completed' => $project->tasks()->where('status', 'completed')->get(),
+        ];
+        
         $users = $project->users()->get();  
         return view('tasks.index', compact('project', 'tasks', 'users'));
     }
@@ -56,5 +62,31 @@ class TaskController extends Controller
         $task->save();
 
         return response()->json(['message' => 'Task status updated successfully.']);
+    }
+    public function allTasks()
+    {
+        // Get the authenticated user
+        $user = Auth::user();
+        
+        // Get all project IDs the user has access to (both owned and shared)
+        $projectIds = $user->accessibleProjects()->pluck('id');
+        
+        // Get tasks from all projects the user is involved in
+        $tasks = [
+            'to_do' => Task::whereIn('project_id', $projectIds)
+                        ->where('status', 'to_do')
+                        ->with(['project', 'user'])
+                        ->get(),
+            'in_progress' => Task::whereIn('project_id', $projectIds)
+                            ->where('status', 'in_progress')
+                            ->with(['project', 'user'])
+                            ->get(),
+            'completed' => Task::whereIn('project_id', $projectIds)
+                        ->where('status', 'completed')
+                        ->with(['project', 'user'])
+                        ->get(),
+        ];
+        
+        return view('tasks.all', compact('tasks'));
     }
 }
