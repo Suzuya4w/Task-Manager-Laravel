@@ -100,8 +100,8 @@ Task Manager allows users to efficiently manage projects and tasks through a use
 
 
 ## Contributing
-For any issues or inquiries, please open an issue on the [Issues](https://github.com/Suzuya4w/Task-Manager/issues).<br/>
-If you can help me by contributing. Please don't hesitate to open a [Pull Request](https://github.com/Suzuya4w/Task-Manager/pulls).<br/>
+For any issues or inquiries, please open an issue on the [Issues](https://github.com/Suzuya4w/Task-Manager-Laravel/issues).<br/>
+If you can help me by contributing. Please don't hesitate to open a [Pull Request](https://github.com/Suzuya4w/Task-Manager-Laravel/pulls).<br/>
 <p align="center">
   <strong>🎉 Thanks for reading! 🌟</strong>
 </p>
