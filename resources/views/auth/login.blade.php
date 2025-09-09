@@ -517,7 +517,7 @@
         toggleBtn.textContent = "☀️";
         localStorage.setItem('theme', 'dark');
       }
-    });
+    }); 
 
     // Password toggle functionality
     const passwordToggle = document.getElementById('passwordToggle');
