@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Task Manager | Login</title>
+  <title>Task Manager | Daftar</title>
   <link rel="shortcut icon" href="{{ asset('assets/img/logo-circle.png') }}" type="image/x-icon">
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -396,7 +396,6 @@
   <button class="toggle-btn" id="themeToggle">🌙</button>
 
   <div class="login-container">
-    <!-- Brand Section -->
     <div class="brand-section">
       <div class="brand-content">
         <img src="{{ asset('assets/img/Task.png') }}" alt="Task Manager" class="brand-logo">
@@ -432,25 +431,32 @@
       </div>
     </div>
 
-    <!-- Login Section -->
     <div class="login-section">
       <div class="login-card">
-        <!-- Mobile Brand -->
         <div class="mobile-brand">
           <img src="{{ asset('assets/img/logo-circle.png') }}" alt="Task Manager" class="mobile-logo">
           <h2 class="brand-title" style="font-size: 1.8rem;">Task Manager</h2>
         </div>
         
         <div class="login-header">
-          <h2 class="login-title">Masuk ke Akun Anda</h2>
-          <p class="login-subtitle">Selamat datang kembali! Silakan masukkan detail login Anda</p>
+          <h2 class="login-title">Buat Akun Baru</h2>
+          <p class="login-subtitle">Bergabunglah dan kelola tugas Anda dengan lebih baik</p>
         </div>
         
-        <form method="POST" action="{{ route('login') }}">
+        <form method="POST" action="{{ route('register') }}">
           @csrf
+
+          <div class="mb-3">
+            <label for="name" class="form-label">Nama Lengkap</label>
+            <input type="text" name="name" id="name" class="form-control" placeholder="Masukkan nama Anda" required autofocus value="{{ old('name') }}">
+            @error('name')
+              <span class="text-danger error-feedback">{{ $message }}</span>
+            @enderror
+          </div>
+
           <div class="mb-3">
             <label for="email" class="form-label">Alamat Email</label>
-            <input type="email" name="email" id="email" class="form-control" placeholder="nama@contoh.com" required autofocus value="{{ old('email') }}">
+            <input type="email" name="email" id="email" class="form-control" placeholder="nama@contoh.com" required value="{{ old('email') }}">
             @error('email')
               <span class="text-danger error-feedback">{{ $message }}</span>
             @enderror
@@ -468,23 +474,25 @@
               <span class="text-danger error-feedback">{{ $message }}</span>
             @enderror
           </div>
-          
-          <div class="mb-3 form-check">
-            <input type="checkbox" name="remember" id="remember" class="form-check-input" {{ old('remember') ? 'checked' : '' }}>
-            <label for="remember" class="form-check-label">Ingat saya</label>
+
+          <div class="mb-3">
+            <label for="password_confirmation" class="form-label">Konfirmasi Kata Sandi</label>
+            <div class="input-group">
+            <input type="password" name="password_confirmation" id="password_confirmation" class="form-control" placeholder="Ulangi kata sandi" required>
+          <button type="button" id="passwordToggle" class="password-toggle">
+                <i class="bi bi-eye"></i>
+              </button>
+        </div>
           </div>
-          
+        
           <div class="d-grid mb-3">
-            <button type="submit" class="btn btn-login">Masuk</button>
+            <button type="submit" class="btn btn-login">Daftar</button>
           </div>
         </form>
         
         <div class="login-footer">
-          <p>Belum punya akun? 
-            <a href="{{ route('register') }}" class="developer-link">Daftar di sini</a>
-          </p>
-          <p>Dikembangkan oleh: 
-            <a href="https://github.com/Suzuya4w" target="_blank" class="developer-link">Suzuya4w</a>
+          <p>Sudah punya akun?
+            <a href="{{ route('login') }}" class="developer-link">Masuk di sini</a>
           </p>
         </div>
       </div>
@@ -542,9 +550,9 @@
       }
     });
 
-    // Focus on email field when page loads
+    // Focus on name field when page loads
     window.onload = function() {
-      document.getElementById('email').focus();
+      document.getElementById('name').focus();
     };
   </script>
 
