@@ -10,14 +10,6 @@
                 <h2 class="mb-1 fw-bold text-dark">Selamat Datang di Dashboard</h2>
                 <p class="text-muted mb-0">Kelola <strong>tugas, rutinitas, catatan, dan file</strong> Anda dari satu tempat</p>
             </div>
-            <div class="d-flex">
-                <span class="badge bg-primary me-2 d-flex align-items-center">
-                    <i class="bi bi-calendar me-1"></i> <strong>{{ now()->format('d M Y') }}</strong>
-                </span>
-                <span class="badge bg-success d-flex align-items-center">
-                    <i class="bi bi-clock me-1"></i> <strong>{{ now()->format('H:i') }}</strong>
-                </span>
-            </div>
         </div>
 
         <!-- Statistics Cards -->
@@ -249,7 +241,7 @@
                 <div class="card shadow-sm h-100">
                     <div class="card-header bg-white py-3 d-flex flex-row align-items-center justify-content-between border-bottom">
                         <h6 class="m-0 fw-bold text-warning">
-                            <i class="bi bi-bell me-2"></i>PENGINGAT MENDAHANG
+                            <i class="bi bi-bell me-2"></i>PENGINGAT MENDATANG
                         </h6>
                         <a href="{{ route('reminders.index') }}" class="text-decoration-none fw-bold text-warning small">LIHAT SEMUA <i class="bi bi-arrow-right ms-1"></i></a>
                     </div>

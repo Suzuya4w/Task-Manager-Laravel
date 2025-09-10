@@ -59,7 +59,7 @@
             overflow-x: hidden;
         }
 
-        .sidebar:hover {
+        .sidebar.expanded {
             width: var(--sidebar-expanded-width);
         }
 
@@ -104,6 +104,10 @@
             border-bottom: 1px solid rgba(255, 255, 255, 0.15);
             transition: all var(--transition-speed) ease;
             background: rgba(0, 0, 0, 0.1);
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
 
         .sidebar .logo-full {
@@ -120,12 +124,37 @@
             transition: opacity 0.3s ease;
         }
 
-        .sidebar:hover .logo-full {
+        .sidebar.expanded .logo-full {
             display: block;
         }
 
-        .sidebar:hover .logo-mini {
+        .sidebar.expanded .logo-mini {
             display: none;
+        }
+
+        /* Sidebar toggle button - Dipindahkan ke navbar */
+        .sidebar-toggle {
+            background-color: transparent;
+            color: var(--primary-dark);
+            border: none;
+            border-radius: 4px;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            margin-right: 10px;
+        }
+
+        .sidebar-toggle:hover {
+            background-color: rgba(37, 99, 235, 0.1);
+        }
+
+        /* Memperbesar ukuran ikon toggle */
+        .sidebar-toggle .bi {
+            font-size: 1.5rem;
         }
 
         /* ========== CONTENT AREA ========== */
@@ -152,6 +181,8 @@
             color: var(--primary-dark);
             font-family: "Mona Sans", "Noto Sans", sans-serif;
             font-size: 1.1rem;
+            display: flex;
+            align-items: center;
         }
 
         .navbar-nav .nav-link {
@@ -248,7 +279,7 @@
             transition: opacity 0.2s ease;
         }
 
-        .sidebar:hover .nav-text {
+        .sidebar.expanded .nav-text {
             opacity: 1;
         }
         
@@ -262,7 +293,7 @@
         .sidebar .nav-item:nth-child(8) { animation-delay: 0.4s; }
         .sidebar .nav-item:nth-child(9) { animation-delay: 0.45s; }
 
-        .sidebar:hover .nav-item {
+        .sidebar.expanded .nav-item {
             opacity: 1;
             transform: translateX(0);
         }
@@ -288,7 +319,7 @@
                 z-index: 1000;
             }
             
-            .sidebar:hover {
+            .sidebar.expanded {
                 width: var(--sidebar-expanded-width);
             }
             
@@ -300,12 +331,7 @@
 </head>
 
 <body>
-    <div class="sidebar d-flex flex-column">
-        <div class="logo-container">
-            <a href="{{ route('dashboard') }}">
-                <img src="{{ asset('assets/img/Task.png') }}" class="logo-full img-fluid" alt="task manager">
-            </a>
-        </div>
+    <div class="sidebar" id="sidebar">
         <ul class="nav flex-column mt-3">
             <li class="nav-item">
                 <a class="nav-link {{ request()->is('/') ? 'active' : '' }}" href="{{ route('dashboard') }}">
@@ -352,6 +378,9 @@
         <header class="topnav mb-4 d-flex align-items-center">
             <nav class="navbar navbar-expand-lg navbar-light w-100">
                 <div class="container-fluid px-0">
+                    <button class="sidebar-toggle" id="sidebarToggle">
+                        <i class="bi bi-list" id="toggleIcon"></i>
+                    </button>
                     <a class="navbar-brand" href="{{ route('dashboard') }}">
                         <span class="fw-semibold" id="currentDateTime"></span>
                     </a>
@@ -422,6 +451,39 @@
 
         updateDateTime();
         setInterval(updateDateTime, 1000);
+
+        // Sidebar toggle functionality
+        document.addEventListener('DOMContentLoaded', function() {
+            const sidebar = document.getElementById('sidebar');
+            const sidebarToggle = document.getElementById('sidebarToggle');
+            const toggleIcon = document.getElementById('toggleIcon');
+            
+            // Check if sidebar state is saved in localStorage
+            const isSidebarExpanded = localStorage.getItem('sidebarExpanded') === 'true';
+            
+            // Set initial state
+            if (isSidebarExpanded) {
+                sidebar.classList.add('expanded');
+                toggleIcon.classList.remove('bi-list');
+                toggleIcon.classList.add('bi-x');
+            }
+            
+            // Toggle sidebar on button click
+            sidebarToggle.addEventListener('click', function() {
+                sidebar.classList.toggle('expanded');
+                
+                // Update icon
+                if (sidebar.classList.contains('expanded')) {
+                    toggleIcon.classList.remove('bi-list');
+                    toggleIcon.classList.add('bi-x');
+                    localStorage.setItem('sidebarExpanded', 'true');
+                } else {
+                    toggleIcon.classList.remove('bi-x');
+                    toggleIcon.classList.add('bi-list');
+                    localStorage.setItem('sidebarExpanded', 'false');
+                }
+            });
+        });
     </script>
 </body>
 
