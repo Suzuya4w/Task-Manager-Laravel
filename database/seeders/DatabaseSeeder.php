@@ -17,12 +17,14 @@ class DatabaseSeeder extends Seeder
             'name' => 'Suzuya',
             'email' => 'suzuya4w@gmail.com',
             'password' => bcrypt('secret'),
+            'role' => 'manager'
         ]);
 
         User::factory()->create([
             'name' => 'Dennyson',
             'email' => 'dennyson@gmail.com',
             'password' => bcrypt('password123'),
+            'role' => 'user'
         ]);
     }
 }
