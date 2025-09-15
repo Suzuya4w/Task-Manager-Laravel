@@ -381,9 +381,7 @@
                     <button class="sidebar-toggle" id="sidebarToggle">
                         <i class="bi bi-list" id="toggleIcon"></i>
                     </button>
-                    <a class="navbar-brand" href="{{ route('dashboard') }}">
                         <span class="fw-semibold" id="currentDateTime"></span>
-                    </a>
                     <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
                         data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false"
                         aria-label="Toggle navigation">
