@@ -435,6 +435,10 @@
     <!-- Login Section -->
     <div class="login-section">
       <div class="login-card">
+
+
+
+        
         <!-- Mobile Brand -->
         <div class="mobile-brand">
           <img src="{{ asset('assets/img/logo-circle.png') }}" alt="Task Manager" class="mobile-logo">

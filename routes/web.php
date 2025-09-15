@@ -49,6 +49,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('checklist-items/{checklistItem}/update-status', [ChecklistItemController::class, 'updateStatus'])->name('checklist-items.update-status');
     Route::get('/', function () {
         $user = Auth::user();
+        $projectsCount = $user->projects()->count();
         $tasksCount = $user->tasks()->count();
         $routinesCount = $user->routines()->count();
         $notesCount = $user->notes()->count();
@@ -61,6 +62,7 @@ Route::middleware(['auth'])->group(function () {
         $upcomingReminders = $user->reminders()->where('date', '>=', now())->orderBy('date')->take(5)->get();
 
         return view('dashboard', compact(
+            'projectsCount',
             'tasksCount', 
             'routinesCount', 
             'notesCount', 

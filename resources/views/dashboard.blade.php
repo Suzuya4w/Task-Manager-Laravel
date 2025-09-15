@@ -14,6 +14,35 @@
 
         <!-- Statistics Cards -->
         <div class="row mb-4">
+
+        <div class="col-xl-3 col-md-6 mb-4">
+                        <div class="card border-0 shadow-sm h-100 py-2 dashboard-card task-card">
+                            <div class="card-body">
+                                <div class="row no-gutters align-items-center">
+                                    <div class="col mr-2">
+                                        <div class="text-xs fw-bold text-warning text-uppercase mb-1">
+                                            TOTAL PROYEK
+                                        </div>
+                                        <div class="h2 mb-0 fw-bold text-gray-800">{{ $projectsCount }}</div>
+                                        <p class="mt-2 mb-0 text-muted">
+                                            <span class="text-nowrap"><strong>{{ $projectsCount }} proyek</strong> tertunda</span>
+                                        </p>
+                                    </div>
+                                    <div class="col-auto">
+                                        <div class="icon-circle bg-warning">
+                                            <i class="bi bi-folder text-white"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card-footer bg-transparent d-flex align-items-center justify-content-between border-top-0 py-3">
+                                <a href="{{ route('projects.index') }}" class="text-decoration-none fw-bold text-warning stretched-link">LIHAT PROYEK</a>
+                                <i class="bi bi-arrow-right-short text-warning fs-5"></i>
+                            </div>
+                        </div>
+                    </div>
+
+
             <div class="col-xl-3 col-md-6 mb-4">
                 <div class="card border-0 shadow-sm h-100 py-2 dashboard-card task-card">
                     <div class="card-body">
@@ -35,7 +64,7 @@
                         </div>
                     </div>
                     <div class="card-footer bg-transparent d-flex align-items-center justify-content-between border-top-0 py-3">
-                        <a href="{{ route('projects.index') }}" class="text-decoration-none fw-bold text-primary stretched-link">LIHAT TUGAS</a>
+                        <a href="{{ route('tasks.index') }}" class="text-decoration-none fw-bold text-primary stretched-link">LIHAT TUGAS</a>
                         <i class="bi bi-arrow-right-short text-primary fs-5"></i>
                     </div>
                 </div>
@@ -91,33 +120,6 @@
                     <div class="card-footer bg-transparent d-flex align-items-center justify-content-between border-top-0 py-3">
                         <a href="{{ route('notes.index') }}" class="text-decoration-none fw-bold text-info stretched-link">LIHAT CATATAN</a>
                         <i class="bi bi-arrow-right-short text-info fs-5"></i>
-                    </div>
-                </div>
-            </div>
-
-            <div class="col-xl-3 col-md-6 mb-4">
-                <div class="card border-0 shadow-sm h-100 py-2 dashboard-card file-card">
-                    <div class="card-body">
-                        <div class="row no-gutters align-items-center">
-                            <div class="col mr-2">
-                                <div class="text-xs fw-bold text-warning text-uppercase mb-1">
-                                    TOTAL FILE
-                                </div>
-                                <div class="h2 mb-0 fw-bold text-gray-800">{{ $filesCount }}</div>
-                                <p class="mt-2 mb-0 text-muted">
-                                    <span class="text-nowrap"><strong>{{ $filesCount }} file</strong> disimpan</span>
-                                </p>
-                            </div>
-                            <div class="col-auto">
-                                <div class="icon-circle bg-warning">
-                                    <i class="bi bi-file-earmark text-white"></i>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="card-footer bg-transparent d-flex align-items-center justify-content-between border-top-0 py-3">
-                        <a href="{{ route('files.index') }}" class="text-decoration-none fw-bold text-warning stretched-link">LIHAT FILE</a>
-                        <i class="bi bi-arrow-right-short text-warning fs-5"></i>
                     </div>
                 </div>
             </div>

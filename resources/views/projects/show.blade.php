@@ -4,7 +4,19 @@
 @endsection
 @section('content')
     <div class="container">
-        <h2 class="mb-4 shadow-sm p-3 rounded bg-white text-center"> {{ $project->name }}</h2>
+
+<div class="bg-white align-items-center mb-4 shadow-sm p-3 rounded d-flex justify-content-between">
+    <!-- Tombol kembali di kiri -->
+    <a href="{{ route ('projects.index') }}" class="btn btn-secondary">
+        ← Kembali
+    </a>
+
+    <!-- Judul di tengah -->
+    <h2 class="text-center flex-grow-1 m-0">Proyek - {{ $project->name }}</h2>
+
+    <!-- Spacer agar h2 tetap center -->
+    <div style="width:90px;"></div>
+        </div>
 
         @if (session('success'))
             <div class="alert alert-success">
@@ -17,16 +29,16 @@
                     <div class="card-body">
                         <h5 class="card-title">{{ $project->name }}</h5>
                         <p class="card-text">{{ $project->description }}</p>
-                        <p class="card-text"><strong>Start Date:</strong>
+                        <p class="card-text"><strong>Tanggal Mulai:</strong>
                             {{ \Carbon\Carbon::parse($project->start_date)->format('Y-m-d') }}</p>
-                        <p class="card-text"><strong>End Date:</strong>
+                        <p class="card-text"><strong>Tanggal Berakhir:</strong>
                             {{ \Carbon\Carbon::parse($project->end_date)->format('Y-m-d') }}</p>
                         <p class="card-text"><strong>Status:</strong>
                             {{ $project->status == 'pending' ? 'Pending' : ($project->status == 'on_going' ? 'In Progress' : 'Completed') }}
                         </p>
-                        <p class="card-text"><strong>Budget:</strong> ${{ $project->budget }}</p>
+                        <p class="card-text"><strong>Budget:</strong> Rp{{ $project->budget }}</p>
 
-                        <h5 class="mt-4">Project Progress</h5>
+                        <h5 class="mt-4">Kemajuan Proyek</h5>
                         @php
                             $totalTasks = $project->tasks->count();
                             $completedTasks = $project->tasks->where('status', 'completed')->count();
@@ -38,7 +50,6 @@
                                 {{ round($progress) }}%</div>
                         </div>
 
-                        <a href="{{ route('projects.index') }}" class="btn btn-secondary mt-3">Back to Projects</a>
                     </div>
                 </div>
             </div>
@@ -46,9 +57,11 @@
                 <div class="card mb-4 shadow-sm">
                     <div class="card-body">
                         <div class="d-flex justify-content-between">
-                            <h5 class="card-title"> Team Members </h5>
+                            <h5 class="card-title"> Anggota Tim </h5>
+                            @if(Auth::user()->role === 'manager')
                             <button type="button" class="btn btn-primary" data-bs-toggle="modal"
                                 data-bs-target="#addMemberModal"> <i class="bi bi-plus-circle"></i> </button>
+                            @endif
                         </div>
 
                         <div class="row">
@@ -77,7 +90,7 @@
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="addMemberModalLabel">Add Team Member</h5>
+                    <h5 class="modal-title" id="addMemberModalLabel">Tambah Anggota Tim</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">

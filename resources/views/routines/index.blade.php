@@ -3,8 +3,10 @@
 @section('content')
     <div class="container">
         <div class="d-flex justify-content-between align-items-center bg-white shadow-sm p-3 rounded mb-4">
-            <h2>Upcoming Routines</h2>
-            <a href="{{ route('routines.create') }}" class="btn btn-primary">Add Routine</a>
+            <h2>Rutinitas Mendatang</h2>
+            @if(Auth::user()->role === 'manager')
+            <a href="{{ route('routines.create') }}" class="btn btn-primary">Tambah Routine</a>
+            @endif
         </div>
 
         @if (session('success'))
@@ -17,16 +19,16 @@
             <div class="col-md-4">
                 <div class="card border-0 shadow-sm">
                     <div class="card-body">
-                        <h3>Daily Routines</h3>
+                        <h3>Rutinitas Harian</h3>
                         <div class="kanban-column">
                             @forelse($upcomingDailyRoutines as $routine)
                                 <div class="card mb-3">
                                     <div class="card-body">
                                         <h5 class="card-title">{{ $routine->title }}</h5>
                                         <p class="card-text">{{ $routine->description }}</p>
-                                        <p class="card-text"><strong>Days:</strong>
+                                        <p class="card-text"><strong>Hari:</strong>
                                             {{ implode(', ', json_decode($routine->days, true) ?? []) }}</p>
-                                        <p class="card-text"><strong>Time:</strong> {{ $routine->start_time }} -
+                                        <p class="card-text"><strong>Waktu:</strong> {{ $routine->start_time }} -
                                             {{ $routine->end_time }}</p>
                                         <div class="d-flex justify-content-between">
                                             <a href="{{ route('routines.edit', $routine->id) }}" class="btn btn-warning"><i
@@ -42,11 +44,10 @@
                                     </div>
                                 </div>
                             @empty
-                                <p>No upcoming daily routines.</p>
+                                <p>Tidak ada rutinitas harian mendatang.</p>
                             @endforelse
                             <div class="mt-3">
-                                <a href="{{ route('routines.showDaily') }}" class="btn btn-secondary">View All Daily
-                                    Routines</a>
+                                <a href="{{ route('routines.showDaily') }}" class="btn btn-secondary">Lihat Semua Rutinitas Harian</a>
                             </div>
                         </div>
                     </div>

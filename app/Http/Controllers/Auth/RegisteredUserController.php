@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rules;
 use Illuminate\View\View;
 
+
 class RegisteredUserController extends Controller
 {
     /**
@@ -39,9 +40,6 @@ class RegisteredUserController extends Controller
             'password' => Hash::make($request->password),
             'role' => 'user', // Set default role to 'user'
         ]);
-
-        Auth::login($user);
-
-        return redirect()->route('dashboard'); // Redirect to your dashboard or home route
+        return redirect()->route('login')->with('success', 'Registrasi berhasil! Silakan login.');
     }
 }

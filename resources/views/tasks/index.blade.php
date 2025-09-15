@@ -27,8 +27,17 @@
         }
     </style>
     <div class="container">
-        <div class="bg-white align-items-center mb-4 shadow-sm p-3 rounded">
-            <h2 class="text-center">{{ $project->name }} - Tasks</h2>
+<div class="bg-white align-items-center mb-4 shadow-sm p-3 rounded d-flex justify-content-between">
+    <!-- Tombol kembali di kiri -->
+    <a href="{{ route ('projects.index') }}" class="btn btn-secondary">
+        ← Kembali
+    </a>
+
+    <!-- Judul di tengah -->
+    <h2 class="text-center flex-grow-1 m-0">Tugas - {{ $project->name }}</h2>
+
+    <!-- Spacer agar h2 tetap center -->
+    <div style="width:90px;"></div>
         </div>
 
         @if (session('success'))

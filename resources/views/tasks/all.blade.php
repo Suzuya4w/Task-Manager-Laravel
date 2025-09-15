@@ -50,8 +50,8 @@
     </style>
     <div class="container">
         <div class="bg-white align-items-center mb-4 shadow-sm p-3 rounded">
-            <h2 class="text-center">All My Tasks</h2>
-            <p class="text-center text-muted mb-0">Tasks from all your projects</p>
+            <h2 class="text-center">Semua Tugas Saya</h2>
+            <p class="text-center text-muted mb-0">Tugas dari semua proyek Anda</p>
         </div>
 
         @if (session('success'))
@@ -92,7 +92,7 @@
                                             <i class="bi bi-folder me-1"></i>{{ $task->project->name }}
                                         </span>
                                         <small class="text-muted">
-                                            Assigned to: {{ $task->user->name }}
+                                            Ditugaskan ke: {{ $task->user->name }}
                                         </small>
                                     </div>
                                     
@@ -102,10 +102,10 @@
                                     
                                     <div class="d-flex gap-2">
                                         <a href="{{ route('tasks.show', $task->id) }}" class="btn btn-outline-primary btn-sm">
-                                            <i class="bi bi-eye"></i> View
+                                            <i class="bi bi-eye"></i> Lihat Tugas
                                         </a>
                                         <a href="{{ route('projects.tasks.index', $task->project) }}" class="btn btn-outline-secondary btn-sm">
-                                            <i class="bi bi-folder"></i> Project
+                                            <i class="bi bi-folder"></i> Lihat Proyek
                                         </a>
                                     </div>
                                 </div>
@@ -115,7 +115,7 @@
                         @if(count($tasks['to_do']) === 0)
                             <div class="text-center text-muted py-4">
                                 <i class="bi bi-inbox display-4"></i>
-                                <p class="mt-2">No tasks to do</p>
+                                <p class="mt-2">Tidak ada tugas yang harus dilakukan</p>
                             </div>
                         @endif
                     </div>
@@ -153,7 +153,7 @@
                                             <i class="bi bi-folder me-1"></i>{{ $task->project->name }}
                                         </span>
                                         <small class="text-muted">
-                                            Assigned to: {{ $task->user->name }}
+                                            Ditugaskan ke: {{ $task->user->name }}
                                         </small>
                                     </div>
                                     
@@ -163,10 +163,10 @@
                                     
                                     <div class="d-flex gap-2">
                                         <a href="{{ route('tasks.show', $task->id) }}" class="btn btn-outline-warning btn-sm">
-                                            <i class="bi bi-eye"></i> View
+                                            <i class="bi bi-eye"></i> Lihat Tugas
                                         </a>
                                         <a href="{{ route('projects.tasks.index', $task->project) }}" class="btn btn-outline-secondary btn-sm">
-                                            <i class="bi bi-folder"></i> Project
+                                            <i class="bi bi-folder"></i> Lihat Proyek
                                         </a>
                                     </div>
                                 </div>
@@ -176,7 +176,7 @@
                         @if(count($tasks['in_progress']) === 0)
                             <div class="text-center text-muted py-4">
                                 <i class="bi bi-hourglass-split display-4"></i>
-                                <p class="mt-2">No tasks in progress</p>
+                                <p class="mt-2">Tidak ada tugas yang sedang berlangsung</p>
                             </div>
                         @endif
                     </div>
@@ -213,7 +213,7 @@
                                             <i class="bi bi-folder me-1"></i>{{ $task->project->name }}
                                         </span>
                                         <small class="text-muted">
-                                            Assigned to: {{ $task->user->name }}
+                                            Ditugaskan ke: {{ $task->user->name }}
                                         </small>
                                     </div>
                                     
@@ -223,10 +223,10 @@
                                     
                                     <div class="d-flex gap-2">
                                         <a href="{{ route('tasks.show', $task->id) }}" class="btn btn-outline-success btn-sm">
-                                            <i class="bi bi-eye"></i> View
+                                            <i class="bi bi-eye"></i> Lihat Tugas
                                         </a>
                                         <a href="{{ route('projects.tasks.index', $task->project) }}" class="btn btn-outline-secondary btn-sm">
-                                            <i class="bi bi-folder"></i> Project
+                                            <i class="bi bi-folder"></i> Lihat Proyek
                                         </a>
                                     </div>
                                 </div>
@@ -236,7 +236,7 @@
                         @if(count($tasks['completed']) === 0)
                             <div class="text-center text-muted py-4">
                                 <i class="bi bi-check-circle display-4"></i>
-                                <p class="mt-2">No completed tasks</p>
+                                <p class="mt-2">Tidak ada tugas yang selesai</p>
                             </div>
                         @endif
                     </div>
