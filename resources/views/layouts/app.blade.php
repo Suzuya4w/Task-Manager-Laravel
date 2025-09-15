@@ -372,8 +372,35 @@
                     <i class="bi bi-file"></i> <span class="nav-text">File</span>
                 </a>
             </li>
+            <li class="nav-item mt-auto">
+                <button class="nav-link text-start w-100" id="closeSidebarBtn" style="background: none; border: none;">
+                    <i class="bi bi-chevron-left"></i> <span class="nav-text">Tutup Sidebar</span>
+                </button>
+            </li>
+            <script>
+                document.addEventListener('DOMContentLoaded', function() {
+                    const closeSidebarBtn = document.getElementById('closeSidebarBtn');
+                    const sidebar = document.getElementById('sidebar');
+                    const toggleIcon = document.getElementById('toggleIcon');
+                    closeSidebarBtn.addEventListener('click', function() {
+                        sidebar.classList.remove('expanded');
+                        toggleIcon.classList.remove('bi-x');
+                        toggleIcon.classList.add('bi-list');
+                        localStorage.setItem('sidebarExpanded', 'false');
+                    });
+                });
+                // Move closeSidebarBtn to the bottom of the sidebar
+                document.addEventListener('DOMContentLoaded', function() {
+                    const sidebar = document.getElementById('sidebar');
+                    const closeSidebarBtn = document.getElementById('closeSidebarBtn');
+                    if (closeSidebarBtn) {
+                        sidebar.appendChild(closeSidebarBtn.parentElement);
+                    }
+                });
+            </script>
         </ul>
     </div>
+    
     <div class="content d-flex flex-column">
         <header class="topnav mb-4 d-flex align-items-center">
             <nav class="navbar navbar-expand-lg navbar-light w-100">
