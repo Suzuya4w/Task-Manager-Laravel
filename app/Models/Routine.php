@@ -20,6 +20,18 @@ class Routine extends Model
         'end_time',
     ];
 
+
+public function getFrequencyLabelAttribute()
+{
+    switch ($this->frequency) {
+        case 'daily': return 'Harian';
+        case 'weekly': return 'Mingguan';
+        case 'monthly': return 'Bulanan';
+        default: return ucfirst($this->frequency);
+    }
+}
+
+
     public function user()
     {
         return $this->belongsTo(User::class);

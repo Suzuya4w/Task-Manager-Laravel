@@ -8,26 +8,32 @@ use Illuminate\Support\Facades\Auth;
 
 class ProjectController extends Controller
 {
-    public function index()
-    {
-        // Get both owned projects and projects where user is a team member
-        $user = Auth::user();
-        
-        $projects = Project::where('user_id', $user->id)
-            ->orWhereHas('users', function($query) use ($user) {
-                $query->where('user_id', $user->id);
-            })
-            ->withCount(['tasks as to_do_tasks' => function ($query) {
+public function index()
+{
+    $user = Auth::user();
+    
+    $projects = Project::where('user_id', $user->id)
+        ->orWhereHas('users', function($query) use ($user) {
+            $query->where('user_id', $user->id);
+        })
+        ->with(['tasks']) 
+        ->withCount([
+            'tasks as to_do_tasks' => function ($query) {
                 $query->where('status', 'to_do');
-            }, 'tasks as in_progress_tasks' => function ($query) {
+            }, 
+            'tasks as in_progress_tasks' => function ($query) {
                 $query->where('status', 'in_progress');
-            }, 'tasks as completed_tasks' => function ($query) {
+            }, 
+            'tasks as completed_tasks' => function ($query) {
                 $query->where('status', 'completed');
-            }])
-            ->get();
+            }
+        ])
+        ->get();
 
-        return view('projects.index', compact('projects'));
-    }
+    return view('projects.index', compact('projects'));
+}
+
+
 
     public function create()
     {
@@ -40,14 +46,16 @@ class ProjectController extends Controller
             'name' => 'required|string|max:255',
             'description' => 'nullable|string',
             'start_date' => 'nullable|date',
-            'end_date' => 'nullable|date',
-            'status' => 'required|in:not_started,in_progress,completed',
+            'end_date' => 'nullable|date|after_or_equal:start_date',
             'budget' => 'nullable|numeric',
         ]);
 
-        Auth::user()->projects()->create($request->all());
+        $data = $request->all();
+        $data['user_id'] = Auth::id();
 
-        return redirect()->route('projects.index')->with('success', 'Project created successfully.');
+        Project::create($data);
+
+        return redirect()->route('projects.index')->with('success', 'Proyek berhasil dibuat.');
     }
 
     public function show(Project $project)
@@ -75,21 +83,21 @@ class ProjectController extends Controller
             'name' => 'required|string|max:255',
             'description' => 'nullable|string',
             'start_date' => 'nullable|date',
-            'end_date' => 'nullable|date',
-            'status' => 'required|in:not_started,in_progress,completed',
+            'end_date' => 'nullable|date|after_or_equal:start_date',
             'budget' => 'nullable|numeric',
         ]);
 
-        $project->update($request->all());
+        $project->update($request->only(['name', 'description', 'start_date', 'end_date', 'budget']));
 
-        return redirect()->route('projects.index')->with('success', 'Project updated successfully.');
+        return redirect()->route('projects.index')->with('success', 'Proyek berhasil diperbarui.');
     }
 
     public function destroy(Project $project)
     {
         $project->delete();
+        $project->tasks()->delete();
 
-        return redirect()->route('projects.index')->with('success', 'Project deleted successfully.');
+        return redirect()->route('projects.index')->with('success', 'Proyek berhasil dihapus.');
     }
 
     public function addMember(Request $request)
@@ -103,12 +111,12 @@ class ProjectController extends Controller
         
         // Check if user is already a member
         if ($project->users()->where('user_id', $request->user_id)->exists()) {
-            return redirect()->back()->with('error', 'User is already a member of this project.');
+            return redirect()->back()->with('error', 'Pengguna sudah menjadi anggota proyek ini.');
         }
         
         // Add user to project team
         $project->users()->attach($request->user_id);
         
-        return redirect()->back()->with('success', 'User added successfully.');
+        return redirect()->back()->with('success', 'Pengguna berhasil ditambahkan.');
     }
 }

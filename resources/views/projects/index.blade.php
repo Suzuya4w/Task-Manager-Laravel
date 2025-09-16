@@ -31,14 +31,18 @@
                             <h5 class="card-title">{{ $project->name }}</h5>
                             <p class="card-text">{{ $project->description }}</p>
                             <p class="card-text">
-                                <strong>Status:</strong> {{ $project->status == 'pending' ? 'Pending' : ($project->status == 'on_going' ? 'In Progress' : 'Completed') }}<br>
+                                <strong>Status:</strong> {{ $project->status }}
+<br>
                                 <strong>Pembuat:</strong> {{ $project->user->name }}<br>
                                 <strong>Batas Waktu:</strong> 
-                                @if($project->end_date && $project->end_date->isFuture())
+                                @if(!$project->end_date)
+                                    <span class="text-muted">Tanpa Batas Waktu</span>
+                                @elseif($project->end_date->isFuture())
                                     {{ $project->end_date->diffForHumans() }}
                                 @else
-                                    <span class="text-danger">Deadline Passed</span>
+                                    <span class="text-danger">Batas waktu telah berlalu</span>
                                 @endif
+
                             </p>
                             <a href="{{ route('projects.tasks.index', $project->id) }}" class="btn btn-primary"> <i class="bi bi-list"></i> Lihat Tugas</a>
                             <a href="{{ route('projects.show', $project->id) }}" class="btn btn-info"> <i class="bi bi-eye"></i> Detail</a>

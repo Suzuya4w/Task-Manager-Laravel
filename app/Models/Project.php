@@ -44,21 +44,33 @@ class Project extends Model
         return $this->hasMany(File::class);
     }
 
-    public function getStatusAttribute()
+            public function getStatusAttribute()
     {
-        $today = Carbon::now();
+        $today = \Carbon\Carbon::now();
 
-        if ($this->start_date && $today->lt($this->start_date)) {
-            return 'pending';
+        $totalTasks     = $this->tasks()->count();
+        $completedTasks = $this->tasks()->where('status', 'completed')->count();
+
+        // 1. Kalau belum ada tugas sama sekali
+        if ($totalTasks === 0) {
+            return 'Belum Dikerjakan';
         }
 
+        // 2. Kalau semua tugas selesai
+        if ($completedTasks === $totalTasks) {
+            return 'Selesai';
+        }
+
+        // 3. Kalau ada deadline & sudah lewat
         if ($this->end_date && $this->end_date->lt($today)) {
-            $unfinishedTasks = $this->tasks()->where('status', '!=', 'completed')->count();
-            return $unfinishedTasks > 0 ? 'unfinished' : 'finished';
+            return 'Terlambat';
         }
 
-        return 'on_going';
+        // 4. Kalau ada sebagian tugas yang sedang dikerjakan
+        return 'Sedang Dikerjakan';
     }
+
+
 
     public function users()
     {

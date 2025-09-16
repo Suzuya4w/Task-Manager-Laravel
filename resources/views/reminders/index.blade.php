@@ -3,8 +3,8 @@
 @section('content')
 <div class="container">
     <div class="d-flex justify-content-between align-items-center bg-white shadow-sm p-3 rounded mb-4">
-        <h2>Reminders</h2>
-        <a href="{{ route('reminders.create') }}" class="btn btn-primary">Add Reminder</a>
+        <h2>Pengingat</h2>
+        <a href="{{ route('reminders.create') }}" class="btn btn-primary">Tambah Pengingat</a>
     </div>
 
     @if(session('success'))
@@ -34,7 +34,7 @@
                 </div>
             </div>
         @empty
-            <p>No reminders found.</p>
+            <p>Tidak ada pengingat yang ditemukan.</p>
         @endforelse
     </div>
 </div>

@@ -64,7 +64,7 @@
             <div class="col-md-4">
                 <div class="kanban-column">
                     <div class="d-flex justify-content-between bg-primary text-white shadow-sm align-items-center px-3 py-2 rounded-top">
-                        <h4 class="text-white fw-bolder m-0">To Do</h4>
+                        <h4 class="text-white fw-bolder m-0">Yang Harus Dikerjakan</h4>
                         <span class="badge bg-light text-dark">{{ count($tasks['to_do']) }}</span>
                     </div>
                     
@@ -73,14 +73,14 @@
                             <div class="card mb-3 kanban-item task-card priority-{{ $task->priority }}" data-id="{{ $task->id }}" draggable="true">
                                 <div class="card-body">
                                     <div class="d-flex justify-content-between align-items-start mb-2">
-                                        <span class="badge {{ $task->priority == 'low' ? 'bg-success' : ($task->priority == 'medium' ? 'bg-warning' : 'bg-danger') }}">
-                                            {{ ucfirst($task->priority) }}
+                                        <span class="badge bg-{{ $task->priority_color }}">
+                                            {{ $task->priority_label }}
                                         </span>
                                         <small class="text-muted">
                                             @if($task->due_date)
-                                                Due: {{ \Carbon\Carbon::parse($task->due_date)->format('M d, Y') }}
+                                                Tanggal: {{ \Carbon\Carbon::parse($task->due_date)->format('M d, Y') }}
                                             @else
-                                                No due date
+                                                Tidak ada batas waktu
                                             @endif
                                         </small>
                                     </div>
@@ -115,7 +115,7 @@
                         @if(count($tasks['to_do']) === 0)
                             <div class="text-center text-muted py-4">
                                 <i class="bi bi-inbox display-4"></i>
-                                <p class="mt-2">Tidak ada tugas yang harus dilakukan</p>
+                                <p class="mt-2">Tidak ada tugas belum dikerjakan</p>
                             </div>
                         @endif
                     </div>
@@ -125,7 +125,7 @@
             <div class="col-md-4">
                 <div class="kanban-column">
                     <div class="d-flex justify-content-between shadow-sm align-items-center bg-warning px-3 py-2 rounded-top">
-                        <h4 class="text-white fw-bolder m-0">In Progress</h4>
+                        <h4 class="text-white fw-bolder m-0">Sedang Dikerjakan</h4>
                         <span class="badge bg-light text-dark">{{ count($tasks['in_progress']) }}</span>
                     </div>
                     
@@ -134,14 +134,14 @@
                             <div class="card mb-3 kanban-item task-card priority-{{ $task->priority }}" data-id="{{ $task->id }}" draggable="true">
                                 <div class="card-body">
                                     <div class="d-flex justify-content-between align-items-start mb-2">
-                                        <span class="badge {{ $task->priority == 'low' ? 'bg-success' : ($task->priority == 'medium' ? 'bg-warning' : 'bg-danger') }}">
-                                            {{ ucfirst($task->priority) }}
+                                        <span class="badge bg-{{ $task->priority_color }}">
+                                            {{ $task->priority_label }}
                                         </span>
                                         <small class="text-muted">
                                             @if($task->due_date)
-                                                Due: {{ \Carbon\Carbon::parse($task->due_date)->format('M d, Y') }}
+                                                Tanggal: {{ \Carbon\Carbon::parse($task->due_date)->format('M d, Y') }}
                                             @else
-                                                No due date
+                                                Tidak ada batas waktu
                                             @endif
                                         </small>
                                     </div>
@@ -186,7 +186,7 @@
             <div class="col-md-4">
                 <div class="kanban-column">
                     <div class="d-flex justify-content-between shadow-sm align-items-center bg-success px-3 py-2 rounded-top">
-                        <h4 class="text-white fw-bolder m-0">Completed</h4>
+                        <h4 class="text-white fw-bolder m-0">Selesai</h4>
                         <span class="badge bg-light text-dark">{{ count($tasks['completed']) }}</span>
                     </div>
                     <div class="kanban-list" id="completed">
@@ -194,14 +194,14 @@
                             <div class="card mb-3 kanban-item task-card priority-{{ $task->priority }}" data-id="{{ $task->id }}" draggable="true">
                                 <div class="card-body">
                                     <div class="d-flex justify-content-between align-items-start mb-2">
-                                        <span class="badge {{ $task->priority == 'low' ? 'bg-success' : ($task->priority == 'medium' ? 'bg-warning' : 'bg-danger') }}">
-                                            {{ ucfirst($task->priority) }}
+                                        <span class="badge bg-{{ $task->priority_color }}">
+                                            {{ $task->priority_label }}
                                         </span>
                                         <small class="text-muted">
                                             @if($task->due_date)
-                                                Due: {{ \Carbon\Carbon::parse($task->due_date)->format('M d, Y') }}
+                                                Tanggal: {{ \Carbon\Carbon::parse($task->due_date)->format('M d, Y') }}
                                             @else
-                                                No due date
+                                                Tidak ada batas waktu
                                             @endif
                                         </small>
                                     </div>
@@ -236,7 +236,7 @@
                         @if(count($tasks['completed']) === 0)
                             <div class="text-center text-muted py-4">
                                 <i class="bi bi-check-circle display-4"></i>
-                                <p class="mt-2">Tidak ada tugas yang selesai</p>
+                                <p class="mt-2">Belum ada tugas yang selesai</p>
                             </div>
                         @endif
                     </div>

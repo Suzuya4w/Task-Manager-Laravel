@@ -25,7 +25,7 @@
                                         </div>
                                         <div class="h2 mb-0 fw-bold text-gray-800">{{ $projectsCount }}</div>
                                         <p class="mt-2 mb-0 text-muted">
-                                            <span class="text-nowrap"><strong>{{ $projectsCount }} proyek</strong> tertunda</span>
+                                            <span class="text-nowrap">Terdapat <strong>{{ $projectsCount }} proyek</strong></span>
                                         </p>
                                     </div>
                                     <div class="col-auto">
@@ -53,7 +53,7 @@
                                 </div>
                                 <div class="h2 mb-0 fw-bold text-gray-800">{{ $tasksCount }}</div>
                                 <p class="mt-2 mb-0 text-muted">
-                                    <span class="text-nowrap"><strong>{{ $tasksCount }} tugas</strong> tertunda</span>
+                                    <span class="text-nowrap">Terdapat <strong>{{ $tasksCount }} tugas</strong></span>
                                 </p>
                             </div>
                             <div class="col-auto">
@@ -146,13 +146,14 @@
                                     <div class="flex-grow-1">
                                         <div class="d-flex justify-content-between align-items-center mb-1">
                                             <h6 class="mb-0 fw-bold">{{ Str::limit($task->title, 30) }}</h6>
-                                            <span class="badge bg-{{ $task->status == 'to_do' ? 'secondary' : 'primary' }} rounded-pill fw-normal">
-                                                {{ $task->status == 'to_do' ? 'TO DO' : 'IN PROGRESS' }}
-                                            </span>
+                                            <span class="badge bg-{{ $task->status_color }} rounded-pill fw-normal">
+                                                    {{ $task->status_label }}
+                                                </span>
+
                                         </div>
                                         <p class="text-muted small mb-0">
                                             <i class="bi bi-calendar me-1"></i> 
-                                            <strong>Due:</strong> {{ $task->due_date ? $task->due_date->format('d M Y') : 'Tidak ada tenggat waktu' }}
+                                            <strong>Tanggal:</strong> {{ $task->due_date ? $task->due_date->format('d M Y') : 'Tidak ada tenggat waktu' }}
                                         </p>
                                     </div>
                                 </div>
@@ -184,7 +185,10 @@
                                     <div class="flex-grow-1">
                                         <div class="d-flex justify-content-between align-items-center mb-1">
                                             <h6 class="mb-0 fw-bold">{{ Str::limit($routine->title, 30) }}</h6>
-                                            <span class="badge bg-light text-dark rounded-pill fw-normal">{{ $routine->frequency }}</span>
+                                            <span class="badge bg-light text-dark rounded-pill fw-normal">
+                                                {{ $routine->frequency_label }}
+                                            </span>
+
                                         </div>
                                         <p class="text-muted small mb-0">
                                             @if($routine->time)
@@ -279,7 +283,7 @@
                                                 ⚠️ <strong>TERLEWAT - {{ $reminder->date->diffForHumans() }}</strong>
                                             @else
                                                 🗓️ <strong>{{ $reminder->date->diffForHumans() }}</strong>
-                                            @endif
+                                            @endif  
                                         </p>
                                     </div>
                                 </div>

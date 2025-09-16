@@ -7,50 +7,76 @@ use Illuminate\Http\Request;
 
 class ChecklistItemController extends Controller
 {
-    public function store(Request $request)
+    public function store(Request $request, $taskId)
     {
-        $request->validate([
-            'name' => 'required|string|max:255',
-            'task_id' => 'required|exists:tasks,id',
+        $validated = $request->validate([
+            'name' => 'required|string|max:191',
         ]);
 
         $checklistItem = ChecklistItem::create([
-            'task_id' => $request->task_id,
+            'task_id' => $taskId,
             'name' => $request->name,
+            'completed' => false,
         ]);
 
-        return response()->json([
-            'success' => true,
-            'data' =>  $checklistItem
-            
-        ]);
+        return response()->json(['success' => true, 'message' => 'Checklist item ditambahkan.']);
     }
 
-    public function updateStatus(ChecklistItem $checklistItem)
+    public function upload(Request $request, $id)
     {
-        $checklistItem->update([
-            'completed' => !$checklistItem->completed === true ? 1 : 0, 
+        $request->validate([
+            'file' => 'required|file|max:2048', // Maksimal 2MB
         ]);
-        return response()->json([
-            'success' => true,
-            'status' => 200
-        ]);
+
+        $checklistItem = ChecklistItem::findOrFail($id);
+        if ($request->hasFile('file')) {
+            $file = $request->file('file');
+            $path = $file->store('checklist_files', 'public');
+            $checklistItem->update(['file_path' => $path]);
+        }
+
+        return redirect()->back()->with('success', 'File berhasil diunggah.');
     }
 
-    public function update(Request $request, ChecklistItem $checklistItem)
+    public function addNotes(Request $request, $id)
     {
-        $checklistItem->update([
-            'completed' => $request->has('completed'),
-            'name' => $request->name,
+        $request->validate([
+            'notes' => 'nullable|string',
         ]);
-        return back()->with('success', 'Checklist item updated successfully.');
+
+        $checklistItem = ChecklistItem::findOrFail($id);
+        $checklistItem->update(['notes' => $request->notes]);
+
+        return redirect()->back()->with('success', 'Catatan berhasil disimpan.');
     }
 
-    public function destroy(ChecklistItem $checklistItem)
+    public function deleteFile($id)
     {
+        $checklistItem = ChecklistItem::findOrFail($id);
+        if ($checklistItem->file_path) {
+            \Storage::disk('public')->delete($checklistItem->file_path);
+            $checklistItem->update(['file_path' => null]);
+        }
+
+        return redirect()->back()->with('success', 'File berhasil dihapus.');
+    }
+
+    public function updateStatus(Request $request, $id)
+    {
+        $checklistItem = ChecklistItem::findOrFail($id);
+        $checklistItem->update(['completed' => $request->completed]);
+
+        return response()->json(['success' => true]);
+    }
+
+    public function destroy($id)
+    {
+        $checklistItem = ChecklistItem::findOrFail($id);
+        if ($checklistItem->file_path) {
+            \Storage::disk('public')->delete($checklistItem->file_path);
+        }
         $checklistItem->delete();
-        return response()->json([
-            'success' => true,
-        ]);
+
+        return response()->json(['success' => true]);
     }
 }

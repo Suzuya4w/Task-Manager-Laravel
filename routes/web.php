@@ -11,6 +11,7 @@ use App\Http\Controllers\RoutineController;
 use App\Http\Controllers\TaskController;
 use App\Http\Controllers\Auth\RegisteredUserController;
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
+use App\Http\Controllers\ProfileController;
 
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
@@ -31,12 +32,26 @@ Route::middleware(['auth'])->group(function () {
     Route::post('projects/add-member', [ProjectController::class, 'addMember'])->name('projects.addMember');
     Route::get('projects/{project}/tasks', [TaskController::class, 'index'])->name('projects.tasks.index');
     Route::post('projects/{project}/tasks', [TaskController::class, 'store'])->name('projects.tasks.store');
-    
+    Route::put('projects/{project}/status', [ProjectController::class, 'updateStatus'])->name('projects.updateStatus');
+
     Route::get('tasks', [TaskController::class, 'allTasks'])->name('tasks.index');
     Route::get('tasks/{task}', [TaskController::class, 'show'])->name('tasks.show');
     Route::put('tasks/{task}', [TaskController::class, 'update'])->name('tasks.update');
     Route::post('tasks/{task}/update-status', [TaskController::class, 'updateStatus']);
-    
+    Route::get('list', [TaskController::class, 'list'])->name('tasks.list');
+    Route::post('/tasks/{id}/upload', [TaskController::class, 'upload'])->name('tasks.upload');
+    Route::post('/tasks/{id}/notes', [TaskController::class, 'addNotes'])->name('tasks.add-notes');
+    Route::delete('/tasks/{id}/delete-file', [TaskController::class, 'deleteFile'])->name('tasks.delete-file');
+
+    Route::post('/checklist-items/{id}/upload', [ChecklistItemController::class, 'upload'])->name('checklist-items.upload');
+    Route::post('/checklist-items/{id}/notes', [ChecklistItemController::class, 'addNotes'])->name('checklist-items.add-notes');
+    Route::delete('/checklist-items/{id}/delete-file', [ChecklistItemController::class, 'deleteFile'])->name('checklist-items.delete-file');
+
+    Route::get('profile', [ProfileController::class, 'edit'])->name('profile.edit');
+    Route::put('profile', [ProfileController::class, 'update'])->name('profile.update');
+    Route::put('profile/password', [ProfileController::class, 'updatePassword'])->name('profile.updatePassword');
+
+
     Route::resource('routines', RoutineController::class)->except(['show']);
     Route::get('routines/showAll', [RoutineController::class, 'showAll'])->name('routines.showAll');
     Route::get('routines/daily', [RoutineController::class, 'showDaily'])->name('routines.showDaily');

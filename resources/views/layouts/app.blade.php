@@ -59,6 +59,17 @@
             overflow-x: hidden;
         }
 
+        /* Default: collapsed */
+.navbar-nav {
+    margin-right: 80px; /* sama dengan var(--sidebar-width) */
+    transition: margin-right var(--transition-speed) ease;
+}
+
+/* Kalau sidebar expanded */
+.sidebar.expanded ~ .content .topnav .navbar-nav {
+    margin-right: 250px; /* sama dengan var(--sidebar-expanded-width) */
+}
+
         .sidebar.expanded {
             width: var(--sidebar-expanded-width);
         }
@@ -349,17 +360,7 @@
                     <i class="bi bi-list-task"></i> <span class="nav-text">Semua Tugas</span>
                 </a>
             </li>
-            <li class="nav-item">
-                <a class="nav-link {{ request()->is('routines*') ? 'active' : '' }}"
-                    href="{{ route('routines.index') }}">
-                    <i class="bi bi-calendar-check"></i> <span class="nav-text">Rutinitas</span>
-                </a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link {{ request()->is('notes*') ? 'active' : '' }}" href="{{ route('notes.index') }}">
-                    <i class="bi bi-sticky"></i> <span class="nav-text">Catatan</span>
-                </a>
-            </li>
+        
             <li class="nav-item">
                 <a class="nav-link {{ request()->is('reminders*') ? 'active' : '' }}"
                     href="{{ route('reminders.index') }}">
@@ -367,11 +368,13 @@
                     <!-- <span class="nav-badge">3</span> -->
                 </a>
             </li>
-            <li class="nav-item">
-                <a class="nav-link {{ request()->is('files*') ? 'active' : '' }}" href="{{ route('files.index') }}">
-                    <i class="bi bi-file"></i> <span class="nav-text">File</span>
-                </a>
-            </li>
+            @if(Auth::user()->role === 'manager')
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ route('tasks.list') }}">
+                        <i class="bi bi-list-check"></i> <span class="nav-text"> Task List</span>
+                    </a>
+                </li>
+            @endif
             <li class="nav-item mt-auto">
                 <button class="nav-link text-start w-100" id="closeSidebarBtn" style="background: none; border: none;">
                     <i class="bi bi-chevron-left"></i> <span class="nav-text">Tutup Sidebar</span>
@@ -402,7 +405,7 @@
     </div>
     
     <div class="content d-flex flex-column">
-        <header class="topnav mb-4 d-flex align-items-center">
+        <header class="topnav mb-4 d-flex align-items-center position-fixed" style="z-index: 800; width: 100%">
             <nav class="navbar navbar-expand-lg navbar-light w-100">
                 <div class="container-fluid px-0">
                     <button class="sidebar-toggle" id="sidebarToggle">
@@ -416,6 +419,38 @@
                     </button>
                     <div class="collapse navbar-collapse justify-content-end" id="navbarNavDropdown">
                         <ul class="navbar-nav">
+
+<li class="nav-item dropdown">
+    <a class="nav-link position-relative" href="#" id="reminderDropdown" role="button"
+       data-bs-toggle="dropdown" aria-expanded="false">
+        <i class="bi bi-bell" style="font-size:1.2rem;"></i>
+        @if(isset($remindersCount) && $remindersCount > 0)
+            <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                {{ $remindersCount }}
+            </span>
+        @endif
+    </a>
+    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="reminderDropdown" style="width: 300px; max-height: 400px; overflow-y:auto;">
+        @if(isset($upcomingReminders) && $upcomingReminders->count() > 0)
+            @foreach($upcomingReminders as $reminder)
+                <li>
+                    <a class="dropdown-item small" href="{{ route('reminders.index') }}">
+                        <strong>{{ $reminder->title }}</strong><br>
+                        <small class="text-muted">
+                            {{ \Carbon\Carbon::parse($reminder->date . ' ' . $reminder->time)->diffForHumans() }}
+                        </small>
+                    </a>
+                </li>
+                <li><hr class="dropdown-divider"></li>
+            @endforeach
+        @else
+            <li><span class="dropdown-item text-muted">Tidak ada notifikasi</span></li>
+        @endif
+    </ul>
+</li>
+
+
+
                             <li class="nav-item dropdown">
                                 <a class="nav-link dropdown-toggle d-flex align-items-center" href="#" id="userDropdown" role="button"
                                     data-bs-toggle="dropdown" aria-expanded="false">
@@ -423,7 +458,7 @@
                                     {{ Auth::user()->name }}
                                 </a>
                                 <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
-                                    <li><a class="dropdown-item" href="#"><i class="bi bi-person me-2"></i>Profil</a></li>
+                                    <li><a class="dropdown-item" href="{{ route('profile.edit') }}"><i class="bi bi-person me-2"></i>Profil</a></li>
                                     <li><hr class="dropdown-divider"></li>
                                     <li>
                                         <form method="POST" action="{{ route('logout') }}" id="logout-form">

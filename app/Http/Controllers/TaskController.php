@@ -3,7 +3,9 @@ namespace App\Http\Controllers;
 
 use App\Models\Project;
 use App\Models\Task;
+use App\Models\Reminder;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Auth;
 
 class TaskController extends Controller
@@ -21,23 +23,86 @@ class TaskController extends Controller
         return view('tasks.index', compact('project', 'tasks', 'users'));
     }
 
-    public function store(Request $request, Project $project)
-    {
-        $request->validate([
-            'user_id' => 'required|exists:users,id',
-            'title' => 'required|string|max:255',
-            'description' => 'nullable|string',
-            'due_date' => 'nullable|date',
-            'priority' => 'required|in:low,medium,high',
-        ]);
+public function store(Request $request, Project $project)
+{
+    $request->validate([
+        'user_id' => 'required|exists:users,id',
+        'title' => 'required|string|max:255',
+        'description' => 'nullable|string',
+        'due_date' => 'nullable|date',
+        'priority' => 'required|in:low,medium,high',
+        'checklist_items' => 'sometimes|array',
+        'checklist_items.*' => 'required|string|max:255',
+    ]);
 
-        $project->tasks()->create($request->all());
+    // Buat tugas baru
+    $task = $project->tasks()->create($request->all());
 
-        return redirect()->route('projects.tasks.index', $project)->with('success', 'Task created successfully.');
+    // Buat checklist items
+    if ($request->has('checklist_items')) {
+        foreach ($request->checklist_items as $itemName) {
+            $task->checklistItems()->create([
+                'name' => $itemName,
+                'completed' => false
+            ]);
+        }
     }
+
+    // Jika ada due_date, otomatis buat reminder
+    if ($task->due_date) {
+        Reminder::create([
+            'task_id' => $task->id,
+            'title' => "Deadline Tugas: " . $task->title,
+            'date' => $task->due_date->toDateString(),
+            'time' => '09:00', // default jam 9 pagi
+            'user_id' => $task->user_id,
+            // Add the 'description' field to resolve the database error
+            'description' => "Deadline untuk tugas: " . $task->title, 
+        ]);
+    }
+
+    return redirect()->route('projects.tasks.index', $project)
+        ->with('success', 'Tugas berhasil dibuat dengan checklist items.');
+}
+
+public function upload(Request $request, $id)
+{
+    $request->validate([
+        'file' => 'required|file|max:2048', // maksimal 2MB
+    ]);
+
+    $task = Task::findOrFail($id);
+    
+    // Hapus file lama jika ada
+    if ($task->file_path && Storage::exists('public/' . $task->file_path)) {
+        Storage::delete('public/' . $task->file_path);
+    }
+    
+    // Simpan file baru
+    $path = $request->file('file')->store('tasks', 'public');
+    $task->file_path = $path;
+    $task->save();
+
+    return redirect()->back()->with('success', 'File uploaded successfully.');
+}
+
+public function addNotes(Request $request, $id)
+{
+    $request->validate([
+        'notes' => 'nullable|string',
+    ]);
+
+    $task = Task::findOrFail($id);
+    $task->notes = $request->notes;
+    $task->save();
+
+    return redirect()->back()->with('success', 'Notes saved successfully.');
+}
 
     public function show(Task $task)
     {
+        // Muat relasi checklistItems, user, dan project
+        $task->load('checklistItems', 'user', 'project');
         return view('tasks.show', compact('task'));
     }
 
@@ -53,7 +118,7 @@ class TaskController extends Controller
 
         $task->update($request->all());
 
-        return redirect()->route('projects.tasks.index', $task->project_id)->with('success', 'Task updated successfully.');
+        return redirect()->route('projects.tasks.index', $task->project_id)->with('success', 'Tugas berhasil diperbarui.');
     }
 
     public function updateStatus(Request $request, Task $task)
@@ -89,4 +154,52 @@ class TaskController extends Controller
         
         return view('tasks.all', compact('tasks'));
     }
+
+// app/Http/Controllers/TaskController.php
+
+public function list(Request $request)
+{
+    $user = Auth::user();
+    
+    // Get all project IDs the user has access to (as manager or member)
+    $projectIds = $user->accessibleProjects()->pluck('id');
+    
+    // Start query
+    $query = Task::whereIn('project_id', $projectIds)
+                ->with(['project', 'user']);
+    
+    // Apply filters
+    $filter = $request->get('filter', 'all');
+    
+    switch ($filter) {
+        case 'with_files':
+            $query->whereNotNull('file_path');
+            break;
+        case 'with_notes':
+            $query->whereNotNull('notes');
+            break;
+        case 'all':
+        default:
+            // Show all tasks
+            break;
+    }
+    
+    // Get paginated results
+    $tasks = $query->orderBy('created_at', 'desc')->paginate(15);
+    
+    return view('tasks.list', compact('tasks', 'filter'));
+}
+    public function deleteFile($id)
+{
+    $task = Task::findOrFail($id);
+    
+    if ($task->file_path && Storage::exists('public/' . $task->file_path)) {
+        Storage::delete('public/' . $task->file_path);
+        $task->file_path = null;
+        $task->save();
+    }
+    
+    return redirect()->back()->with('success', 'File deleted successfully.');
+}
+
 }

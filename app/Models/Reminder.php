@@ -10,11 +10,24 @@ class Reminder extends Model
     use HasFactory;
 
     protected $fillable = [
+        'task_id',
         'title',
         'description',
         'date',
         'time',
+        'user_id',
     ];
+
+        protected $casts = [
+        'date' => 'date',
+        'time' => 'datetime:H:i', // Cast time ke format waktu
+    ];
+
+        public function task()
+        {
+            return $this->belongsTo(Task::class);
+        }
+
 
     public function user()
     {
