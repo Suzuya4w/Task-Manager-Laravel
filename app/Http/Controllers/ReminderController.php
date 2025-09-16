@@ -5,13 +5,28 @@ namespace App\Http\Controllers;
 use App\Models\Reminder;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Carbon\Carbon;
 
 class ReminderController extends Controller
 {
     public function index()
     {
         $reminders = Auth::user()->reminders()->latest()->get();
-        return view('reminders.index', compact('reminders'));
+        
+        // Hitung jumlah reminders yang akan datang
+        $remindersCount = Auth::user()->reminders()
+            ->where('date', '>=', Carbon::today())
+            ->count();
+            
+        // Ambil reminders yang akan datang (5 terdekat)
+        $upcomingReminders = Auth::user()->reminders()
+            ->where('date', '>=', Carbon::today())
+            ->orderBy('date')
+            ->orderBy('time')
+            ->take(5)
+            ->get();
+
+        return view('reminders.index', compact('reminders', 'remindersCount', 'upcomingReminders'));
     }
 
     public function create()
@@ -26,6 +41,7 @@ class ReminderController extends Controller
             'description' => 'nullable|string',
             'date' => 'nullable|date',
             'time' => 'nullable|date_format:H:i',
+            'task_id' => 'nullable|exists:tasks,id' // Tambahkan validasi untuk task_id
         ]);
 
         Auth::user()->reminders()->create($request->all());
@@ -45,6 +61,7 @@ class ReminderController extends Controller
             'description' => 'nullable|string',
             'date' => 'nullable|date',
             'time' => 'nullable|date_format:H:i',
+            'task_id' => 'nullable|exists:tasks,id' // Tambahkan validasi untuk task_id
         ]);
 
         $reminder->update($request->all());

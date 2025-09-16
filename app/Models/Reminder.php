@@ -18,20 +18,26 @@ class Reminder extends Model
         'user_id',
     ];
 
-        protected $casts = [
+    protected $casts = [
         'date' => 'date',
-        'time' => 'datetime:H:i', // Cast time ke format waktu
+        'time' => 'datetime:H:i',
     ];
 
-        public function task()
-        {
-            return $this->belongsTo(Task::class);
-        }
-
+    public function task()
+    {
+        return $this->belongsTo(Task::class);
+    }
 
     public function user()
     {
         return $this->belongsTo(User::class);
     }
 
+    // Scope untuk reminders yang akan datang
+    public function scopeUpcoming($query)
+    {
+        return $query->where('date', '>=', now()->format('Y-m-d'))
+                    ->orderBy('date')
+                    ->orderBy('time');
+    }
 }
