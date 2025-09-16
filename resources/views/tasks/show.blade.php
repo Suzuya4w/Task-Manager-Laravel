@@ -79,10 +79,12 @@
                         <div class="col-md-12 mt-4">
                             <div class="d-flex justify-content-between align-items-center border-top pt-3">
                                 <h5>Checklist Items</h5>
+                                @if(Auth::user()->role === 'manager')
                                 <button type="button" class="btn btn-primary" data-bs-toggle="modal"
                                     data-bs-target="#addChecklistModal"> 
                                     <i class="bi bi-plus-circle"></i> Tambah Item
                                 </button>
+                                @endif
                             </div>
 
                             <div class="mt-3">
@@ -114,19 +116,23 @@
                                                         <i class="bi bi-sticky"></i>
                                                     </button>
                                                     
+                                                    @if(Auth::user()->role === 'manager')
                                                     <!-- Tombol edit -->
                                                     <button type="button" class="btn btn-outline-secondary btn-sm" 
                                                         data-bs-toggle="modal" data-bs-target="#editChecklistModal-{{ $item->id }}"
                                                         title="Edit Item">
                                                         <i class="bi bi-pencil-square"></i>
                                                     </button>
-                                                    
+                                                    @endif
+
+                                                    @if(Auth::user()->role === 'manager')
                                                     <!-- Tombol delete -->
                                                     <button type="button" class="btn btn-outline-danger btn-sm"
                                                         onclick="deleteChecklistItem({{ $item->id }})"
                                                         title="Hapus Item">
                                                         <i class="bi bi-trash"></i>
                                                     </button>
+                                                    @endif
                                                 </div>
                                             </div>
 
