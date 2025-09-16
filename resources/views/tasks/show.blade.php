@@ -14,10 +14,12 @@
             <!-- Judul di tengah -->
             <h2 class="text-center flex-grow-1 m-0">Detail Tugas - {{ $task->title }}</h2>
 
+            @if(Auth::user()->role === 'manager')
             <!-- Tombol edit di kanan -->
             <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#editTaskModal">
                 <i class="bi bi-pencil-square"></i> Edit
             </button>
+            @endif
         </div>
 
         @if (session('success'))

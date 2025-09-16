@@ -369,6 +369,11 @@
                     <i class="bi bi-list-task"></i> <span class="nav-text">Semua Tugas</span>
                 </a>
             </li>
+            <li class="nav-item">
+                <a class="nav-link {{ request()->is('notes') ? 'active' : '' }}" href="{{ route('notes.index') }}">
+                    <i class="bi bi-journal-text"></i> <span class="nav-text">Catatan</span>
+                </a>
+            </li>
         
 
             @if(Auth::user()->role === 'manager')
@@ -424,7 +429,7 @@
                         <ul class="navbar-nav">
 
 
-<li class="nav-item dropdown">
+<li class="nav-item dropdown" style="margin-right: 15px;">
                                 <a class="nav-link position-relative" href="#" id="reminderDropdown" role="button"
                                    data-bs-toggle="dropdown" aria-expanded="false">
                                     <i class="bi bi-bell" style="font-size:1.2rem;"></i>
