@@ -378,7 +378,7 @@
 
             @if(Auth::user()->role === 'manager')
                 <li class="nav-item">
-                    <a class="nav-link" href="{{ route('tasks.list') }}">
+                    <a class="nav-link {{ request()->is('list') ? 'active' : '' }}" href="{{ route('tasks.list') }}">
                         <i class="bi bi-list-check"></i> <span class="nav-text"> Task List</span>
                     </a>
                 </li>

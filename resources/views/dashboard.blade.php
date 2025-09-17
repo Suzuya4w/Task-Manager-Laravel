@@ -70,32 +70,7 @@
                 </div>
             </div>
 
-            <div class="col-xl-3 col-md-6 mb-4">
-                <div class="card border-0 shadow-sm h-100 py-2 dashboard-card routine-card">
-                    <div class="card-body">
-                        <div class="row no-gutters align-items-center">
-                            <div class="col mr-2">
-                                <div class="text-xs fw-bold text-success text-uppercase mb-1">
-                                    RUTINITAS HARI INI
-                                </div>
-                                <div class="h2 mb-0 fw-bold text-gray-800">{{ $routinesCount }}</div>
-                                <p class="mt-2 mb-0 text-muted">
-                                    <span class="text-nowrap"><strong>{{ $routinesCount }} rutinitas</strong> terjadwal</span>
-                                </p>
-                            </div>
-                            <div class="col-auto">
-                                <div class="icon-circle bg-success">
-                                    <i class="bi bi-calendar-check text-white"></i>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="card-footer bg-transparent d-flex align-items-center justify-content-between border-top-0 py-3">
-                        <a href="{{ route('routines.index') }}" class="text-decoration-none fw-bold text-success stretched-link">LIHAT RUTINITAS</a>
-                        <i class="bi bi-arrow-right-short text-success fs-5"></i>
-                    </div>
-                </div>
-            </div>
+
 
             <div class="col-xl-3 col-md-6 mb-4">
                 <div class="card border-0 shadow-sm h-100 py-2 dashboard-card note-card">
