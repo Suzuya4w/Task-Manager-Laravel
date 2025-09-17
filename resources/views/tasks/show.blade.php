@@ -104,28 +104,7 @@
                                                     </label>
                                                 </div>
                                                 <div class="btn-group">
-                                                    <!-- Tombol untuk buka modal upload file -->
-                                                    <button type="button" class="btn btn-outline-primary btn-sm" 
-                                                        data-bs-toggle="modal" data-bs-target="#uploadFileModal-{{ $item->id }}"
-                                                        title="Upload File">
-                                                        <i class="bi bi-upload"></i>
-                                                    </button>
                                                     
-                                                    <!-- Tombol untuk buka modal catatan -->
-                                                    <button type="button" class="btn btn-outline-info btn-sm" 
-                                                        data-bs-toggle="modal" data-bs-target="#notesModal-{{ $item->id }}"
-                                                        title="Tambah Catatan">
-                                                        <i class="bi bi-sticky"></i>
-                                                    </button>
-                                                    
-                                                    @if(Auth::user()->role === 'manager')
-                                                    <!-- Tombol edit -->
-                                                    <button type="button" class="btn btn-outline-secondary btn-sm" 
-                                                        data-bs-toggle="modal" data-bs-target="#editChecklistModal-{{ $item->id }}"
-                                                        title="Edit Item">
-                                                        <i class="bi bi-pencil-square"></i>
-                                                    </button>
-                                                    @endif
 
                                                     @if(Auth::user()->role === 'manager')
                                                     <!-- Tombol delete -->
