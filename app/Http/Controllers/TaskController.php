@@ -149,10 +149,8 @@ public function list(Request $request)
 {
     $user = Auth::user();
     
-    // Get all project IDs the user has access to (as manager or member)
     $projectIds = $user->accessibleProjects()->pluck('id');
     
-    // Start query
     $query = Task::whereIn('project_id', $projectIds)
                 ->with(['project', 'user']);
     
@@ -168,11 +166,9 @@ public function list(Request $request)
             break;
         case 'all':
         default:
-            // Show all tasks
             break;
     }
     
-    // Get paginated results
     $tasks = $query->orderBy('created_at', 'desc')->paginate(15);
     
     return view('tasks.list', compact('tasks', 'filter'));

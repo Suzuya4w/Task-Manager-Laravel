@@ -60,15 +60,14 @@ public function index()
 
     public function show(Project $project)
     {
-        // Check if user has access to this project (either owner or team member)
         $user = Auth::user();
         
         if ($project->user_id !== $user->id && !$project->users()->where('user_id', $user->id)->exists()) {
-            abort(403, 'Unauthorized access to this project.');
+            abort(403, 'Anda tidak memiliki akses.');
         }
         
         $teamMembers = $project->users()->get();
-        $users = User::where('id', '!=', $user->id)->get(); // Exclude current user
+        $users = User::where('id', '!=', $user->id)->get(); // Ambil semua user kecuali user yang sedang login
         
         return view('projects.show', compact('project', 'teamMembers', 'users'));
     }
@@ -109,12 +108,10 @@ public function index()
     
         $project = Project::find($request->project_id);
         
-        // Check if user is already a member
         if ($project->users()->where('user_id', $request->user_id)->exists()) {
             return redirect()->back()->with('error', 'Pengguna sudah menjadi anggota proyek ini.');
         }
         
-        // Add user to project team
         $project->users()->attach($request->user_id);
         
         return redirect()->back()->with('success', 'Pengguna berhasil ditambahkan.');
