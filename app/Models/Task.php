@@ -91,17 +91,8 @@ public function getStatusColorAttribute()
     }
 }
 
-public function reminder()
-{
-    return $this->hasOne(Reminder::class);
-}
-
     public function checklistItems()
     {
         return $this->hasMany(ChecklistItem::class);
-    }
-    public function files()
-    {
-        return $this->hasMany(File::class);
     }
 }

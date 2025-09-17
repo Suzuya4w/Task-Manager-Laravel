@@ -39,12 +39,8 @@ class Project extends Model
         return $this->hasMany(Task::class);
     }
 
-    public function files()
-    {
-        return $this->hasMany(File::class);
-    }
 
-            public function getStatusAttribute()
+        public function getStatusAttribute()
     {
         $today = \Carbon\Carbon::now();
 

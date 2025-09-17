@@ -21,9 +21,7 @@ Route::get('register', [RegisteredUserController::class, 'create'])->name('regis
 Route::post('register', [RegisteredUserController::class, 'store']);
 
 Route::middleware(['auth'])->group(function () {
-    Route::controller(MailController::class)->prefix('mail')->name('mail.')->group(function () {
-        Route::get('/', 'index')->name('inbox');
-    });
+
     Route::resource('projects', ProjectController::class);
     Route::post('projects/add-member', [ProjectController::class, 'addMember'])->name('projects.addMember');
     Route::get('projects/{project}/tasks', [TaskController::class, 'index'])->name('projects.tasks.index');

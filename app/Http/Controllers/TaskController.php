@@ -48,18 +48,6 @@ public function store(Request $request, Project $project)
         }
     }
 
-    // Jika ada due_date, otomatis buat reminder
-    if ($task->due_date) {
-        Reminder::create([
-            'task_id' => $task->id,
-            'title' => "Deadline Tugas: " . $task->title,
-            'date' => $task->due_date->toDateString(),
-            'time' => '09:00', // default jam 9 pagi
-            'user_id' => $task->user_id,
-            // Add the 'description' field to resolve the database error
-            'description' => "Deadline untuk tugas: " . $task->title, 
-        ]);
-    }
 
     return redirect()->route('projects.tasks.index', $project)
         ->with('success', 'Tugas berhasil dibuat dengan checklist items.');
