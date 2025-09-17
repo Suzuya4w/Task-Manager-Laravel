@@ -32,22 +32,24 @@ Route::middleware(['auth'])->group(function () {
     Route::get('tasks/{task}', [TaskController::class, 'show'])->name('tasks.show');
     Route::put('tasks/{task}', [TaskController::class, 'update'])->name('tasks.update');
     Route::post('tasks/{task}/update-status', [TaskController::class, 'updateStatus']);
-    Route::get('list', [TaskController::class, 'list'])->name('tasks.list');
     Route::post('/tasks/{id}/upload', [TaskController::class, 'upload'])->name('tasks.upload');
     Route::post('/tasks/{id}/notes', [TaskController::class, 'addNotes'])->name('tasks.add-notes');
     Route::delete('/tasks/{id}/delete-file', [TaskController::class, 'deleteFile'])->name('tasks.delete-file');
 
+    Route::get('list', [TaskController::class, 'list'])->name('tasks.list');
+
+    Route::resource('checklist-items', ChecklistItemController::class);
     Route::post('/checklist-items/{id}/upload', [ChecklistItemController::class, 'upload'])->name('checklist-items.upload');
     Route::post('/checklist-items/{id}/notes', [ChecklistItemController::class, 'addNotes'])->name('checklist-items.add-notes');
     Route::delete('/checklist-items/{id}/delete-file', [ChecklistItemController::class, 'deleteFile'])->name('checklist-items.delete-file');
+    Route::get('checklist-items/{checklistItem}/update-status', [ChecklistItemController::class, 'updateStatus'])->name('checklist-items.update-status');
 
     Route::get('profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::put('profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::put('profile/password', [ProfileController::class, 'updatePassword'])->name('profile.updatePassword');
 
     Route::resource('notes', NoteController::class);
-    Route::resource('checklist-items', ChecklistItemController::class);
-    Route::get('checklist-items/{checklistItem}/update-status', [ChecklistItemController::class, 'updateStatus'])->name('checklist-items.update-status');
+
     Route::get('/', function () {
         $user = Auth::user();
         $projectsCount = $user->projects()->count();
