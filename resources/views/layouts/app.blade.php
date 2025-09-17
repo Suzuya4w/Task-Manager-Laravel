@@ -60,15 +60,15 @@
         }
 
         /* Default: collapsed */
-.navbar-nav {
-    margin-right: 80px; /* sama dengan var(--sidebar-width) */
-    transition: margin-right var(--transition-speed) ease;
-}
+        .navbar-nav {
+            margin-right: 80px; /* sama dengan var(--sidebar-width) */
+            transition: margin-right var(--transition-speed) ease;
+        }
 
-/* Kalau sidebar expanded */
-.sidebar.expanded ~ .content .topnav .navbar-nav {
-    margin-right: 250px; /* sama dengan var(--sidebar-expanded-width) */
-}
+        /* Kalau sidebar expanded */
+        .sidebar.expanded ~ .content .topnav .navbar-nav {
+            margin-right: 250px; /* sama dengan var(--sidebar-expanded-width) */
+        }
 
         .sidebar.expanded {
             width: var(--sidebar-expanded-width);
@@ -309,14 +309,15 @@
             opacity: 1;
             transform: translateX(0);
         }
-.badge-on-bell {
-    position: absolute;
-    top: 2px; /* Turunkan posisi badge */
-    right: -4px; /* Geser sedikit ke kiri agar rapi */
-    transform: translate(0, 0); /* Hilangkan translate-middle untuk kontrol lebih */
-    font-size: 0.65rem; /* Kurangi ukuran font jika badge terlalu besar */
-    padding: 2px 6px; /* Sesuaikan padding agar lebih kecil */
-}
+        
+        .badge-on-bell {
+            position: absolute;
+            top: 2px; /* Turunkan posisi badge */
+            right: -4px; /* Geser sedikit ke kiri agar rapi */
+            transform: translate(0, 0); /* Hilangkan translate-middle untuk kontrol lebih */
+            font-size: 0.65rem; /* Kurangi ukuran font jika badge terlalu besar */
+            padding: 2px 6px; /* Sesuaikan padding agar lebih kecil */
+        }
 
         /* Notification badge (optional) */
         .nav-badge {
@@ -351,184 +352,16 @@
 </head>
 
 <body>
-    <div class="sidebar" id="sidebar">
-        <ul class="nav flex-column mt-3">
-            <li class="nav-item">
-                <a class="nav-link {{ request()->is('/') ? 'active' : '' }}" href="{{ route('dashboard') }}">
-                    <i class="bi bi-house-door"></i> <span class="nav-text">Beranda</span>
-                </a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link {{ request()->is('projects*') ? 'active' : '' }}"
-                    href="{{ route('projects.index') }}">
-                    <i class="bi bi-folder"></i> <span class="nav-text">Proyek</span>
-                </a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link {{ request()->is('tasks') ? 'active' : '' }}" href="{{ route('tasks.index') }}">
-                    <i class="bi bi-list-task"></i> <span class="nav-text">Semua Tugas</span>
-                </a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link {{ request()->is('notes') ? 'active' : '' }}" href="{{ route('notes.index') }}">
-                    <i class="bi bi-journal-text"></i> <span class="nav-text">Catatan</span>
-                </a>
-            </li>
-        
-
-            @if(Auth::user()->role === 'manager')
-                <li class="nav-item">
-                    <a class="nav-link {{ request()->is('list') ? 'active' : '' }}" href="{{ route('tasks.list') }}">
-                        <i class="bi bi-list-check"></i> <span class="nav-text"> Task List</span>
-                    </a>
-                </li>
-            @endif
-            <li class="nav-item mt-auto">
-                <button class="nav-link text-start w-100" id="closeSidebarBtn" style="background: none; border: none;">
-                    <i class="bi bi-chevron-left"></i> <span class="nav-text">Tutup Sidebar</span>
-                </button>
-            </li>
-            <script>
-                document.addEventListener('DOMContentLoaded', function() {
-                    const closeSidebarBtn = document.getElementById('closeSidebarBtn');
-                    const sidebar = document.getElementById('sidebar');
-                    const toggleIcon = document.getElementById('toggleIcon');
-                    closeSidebarBtn.addEventListener('click', function() {
-                        sidebar.classList.remove('expanded');
-                        toggleIcon.classList.remove('bi-x');
-                        toggleIcon.classList.add('bi-list');
-                        localStorage.setItem('sidebarExpanded', 'false');
-                    });
-                });
-                // Move closeSidebarBtn to the bottom of the sidebar
-                document.addEventListener('DOMContentLoaded', function() {
-                    const sidebar = document.getElementById('sidebar');
-                    const closeSidebarBtn = document.getElementById('closeSidebarBtn');
-                    if (closeSidebarBtn) {
-                        sidebar.appendChild(closeSidebarBtn.parentElement);
-                    }
-                });
-            </script>
-        </ul>
-    </div>
+    @include('layouts.partials.sidebar')
     
     <div class="content d-flex flex-column">
-        <header class="topnav mb-4 d-flex align-items-center position-fixed" style="z-index: 800; width: 100%">
-            <nav class="navbar navbar-expand-lg navbar-light w-100">
-                <div class="container-fluid px-0">
-                    <button class="sidebar-toggle" id="sidebarToggle">
-                        <i class="bi bi-list" id="toggleIcon"></i>
-                    </button>
-                        <span class="fw-semibold" id="currentDateTime"></span>
-                    <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
-                        data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false"
-                        aria-label="Toggle navigation">
-                        <span class="navbar-toggler-icon"></span>
-                    </button>
-                    <div class="collapse navbar-collapse justify-content-end" id="navbarNavDropdown">
-                        <ul class="navbar-nav">
-
-
-<li class="nav-item dropdown" style="margin-right: 15px;">
-                                <a class="nav-link position-relative" href="#" id="reminderDropdown" role="button"
-                                   data-bs-toggle="dropdown" aria-expanded="false">
-                                    <i class="bi bi-bell" style="font-size:1.2rem;"></i>
-                                    @php
-                                        // Hitung tugas yang belum selesai (to_do atau in_progress)
-                                        $tasksCount = Auth::user()->tasks()
-                                            ->whereIn('status', ['to_do', 'in_progress'])
-                                            ->count();
-                                    @endphp
-                                    @if($tasksCount > 0)
-                                        <span class="badge-on-bell badge rounded-pill bg-danger">
-                                            {{ $tasksCount }}
-                                        </span>
-                                    @endif
-                                </a>
-                                <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="reminderDropdown" style="width: 300px; max-height: 400px; overflow-y:auto;">
-                                    @php
-                                        // Ambil tugas yang belum selesai (max 5, urut berdasarkan created_at desc)
-                                        $pendingTasks = Auth::user()->tasks()
-                                            ->whereIn('status', ['to_do', 'in_progress'])
-                                            ->orderBy('created_at', 'desc')
-                                            ->take(5)
-                                            ->get();
-                                    @endphp
-                                    
-                                    @if($pendingTasks->count() > 0)
-                                        <li class="dropdown-header text-center fw-bold">Tugas Belum Selesai</li>
-                                        @foreach($pendingTasks as $task)
-                                            <li>
-                                                <a class="dropdown-item small" href="{{ route('tasks.show', $task->id) }}">
-                                                    <div class="d-flex justify-content-between">
-                                                        <strong>{{ $task->title }}</strong>
-                                                        @if($task->due_date)
-                                                            <span class="badge bg-primary">{{ $task->due_date }}</span>
-                                                        @else
-                                                            <span class="badge bg-secondary">No Due Date</span>
-                                                        @endif
-                                                    </div>
-                                                    <small class="text-muted d-block mt-1">
-                                                        <i class="bi bi-flag"></i> {{ ucfirst($task->priority) }} Priority
-                                                    </small>
-                                                    @if($task->description)
-                                                        <small class="text-muted d-block mt-1">
-                                                            {{ \Illuminate\Support\Str::limit($task->description, 50) }}
-                                                        </small>
-                                                    @endif
-                                                </a>
-                                            </li>
-                                            @if(!$loop->last)
-                                                <li><hr class="dropdown-divider m-1"></li>
-                                            @endif
-                                        @endforeach
-                                        <li class="dropdown-item text-center">
-                                            <a href="{{ route('tasks.index') }}" class="btn btn-sm btn-outline-primary w-100">
-                                                Lihat Semua Tugas
-                                            </a>
-                                        </li>
-                                    @else
-                                        <li class="dropdown-item text-center text-muted py-3">
-                                            <i class="bi bi-check-circle" style="font-size: 2rem;"></i>
-                                            <p class="mt-2 mb-0">Tidak ada tugas yang belum selesai</p>
-                                        </li>
-                                    @endif
-                                </ul>
-                            </li>
-
-
-
-                            <li class="nav-item dropdown">
-                                <a class="nav-link dropdown-toggle d-flex align-items-center" href="#" id="userDropdown" role="button"
-                                    data-bs-toggle="dropdown" aria-expanded="false">
-                                    <i class="bi bi-person-circle me-1"></i>
-                                    {{ Auth::user()->name }}
-                                </a>
-                                <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
-                                    <li><a class="dropdown-item" href="{{ route('profile.edit') }}"><i class="bi bi-person me-2"></i>Profil</a></li>
-                                    <li><hr class="dropdown-divider"></li>
-                                    <li>
-                                        <form method="POST" action="{{ route('logout') }}" id="logout-form">
-                                            @csrf
-                                            <button type="submit" class="dropdown-item"><i class="bi bi-box-arrow-right me-2"></i>Keluar</button>
-                                        </form>
-                                    </li>
-                                </ul>
-                            </li>
-                        </ul>
-                    </div>
-                </div>
-            </nav>
-        </header>
+        @include('layouts.partials.navbar')
+        
         <main>
             @yield('content')
         </main>
-        <footer class="mt-auto py-3 text-center">
-            <div class="container">
-                <span class="text-muted">&copy; {{ date('Y') }} Task Manager | Dikembangkan oleh <a
-                        href="https://github.com/Suzuya4w" target="_blank">Suzuya4w</a> </span>
-            </div>
-        </footer>
+        
+        @include('layouts.partials.footer')
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
