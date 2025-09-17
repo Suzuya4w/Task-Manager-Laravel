@@ -141,49 +141,6 @@
                 </div>
             </div>
 
-            <!-- Today's Routines -->
-            <div class="col-xl-6 col-lg-6 mb-4">
-                <div class="card shadow-sm h-100">
-                    <div class="card-header bg-white py-3 d-flex flex-row align-items-center justify-content-between border-bottom">
-                        <h6 class="m-0 fw-bold text-success">
-                            <i class="bi bi-calendar-check me-2"></i>RUTINITAS HARI INI
-                        </h6>
-                        <a href="{{ route('routines.index') }}" class="text-decoration-none fw-bold text-success small">LIHAT SEMUA <i class="bi bi-arrow-right ms-1"></i></a>
-                    </div>
-                    <div class="card-body">
-                        <div class="list-group list-group-flush">
-                            @foreach($todayRoutines as $routine)
-                                <div class="list-group-item border-0 px-0 py-3 d-flex align-items-center">
-                                    <div class="bg-success rounded-circle p-2 me-3 d-flex align-items-center justify-content-center">
-                                        <i class="bi bi-arrow-repeat text-white"></i>
-                                    </div>
-                                    <div class="flex-grow-1">
-                                        <div class="d-flex justify-content-between align-items-center mb-1">
-                                            <h6 class="mb-0 fw-bold">{{ Str::limit($routine->title, 30) }}</h6>
-                                            <span class="badge bg-light text-dark rounded-pill fw-normal">
-                                                {{ $routine->frequency_label }}
-                                            </span>
-
-                                        </div>
-                                        <p class="text-muted small mb-0">
-                                            @if($routine->time)
-                                                <i class="bi bi-clock me-1"></i> 
-                                                <strong>Waktu:</strong> {{ $routine->time->format('H:i') }}
-                                            @else
-                                                <i class="bi bi-info-circle me-1"></i> 
-                                                <strong>Tidak ada waktu spesifik</strong>
-                                            @endif
-                                        </p>
-                                    </div>
-                                </div>
-                                @if(!$loop->last)
-                                    <hr class="my-2">
-                                @endif
-                            @endforeach
-                        </div>
-                    </div>
-                </div>
-            </div>
 
             <!-- Recent Notes -->
             <div class="col-xl-6 col-lg-6 mb-4">
