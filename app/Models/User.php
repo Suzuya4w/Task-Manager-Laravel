@@ -57,13 +57,6 @@ class User extends Authenticatable
         return $this->hasMany(Task::class);
     }
 
-    /**
-     * Get the routines for the user.
-     */
-    public function routines()
-    {
-        return $this->hasMany(Routine::class);
-    }
 
     /**
      * Get the notes for the user.
@@ -73,27 +66,14 @@ class User extends Authenticatable
         return $this->hasMany(Note::class);
     }
 
-    /**
-     * Get the calendar events for the user.
-     */
-    public function files()
-    {
-        return $this->hasMany(File::class);
-    }
-
-    public function reminders()
-    {
-        return $this->hasMany(Reminder::class);
-    }
 
     public function projectMembers()
     {
         return $this->belongsToMany(Project::class, 'project_teams', 'user_id', 'project_id');
     }
-    // Add this method to get all projects the user has access to (both owned and shared)
+
 public function accessibleProjects()
 {
-    // Get projects where user is owner OR team member
     return Project::where('user_id', $this->id)
                 ->orWhereHas('users', function($query) {
                     $query->where('user_id', $this->id);
@@ -101,7 +81,6 @@ public function accessibleProjects()
                 ->get();
 }
 
-// Update the projectMembers relationship to match your pivot table structure
 public function sharedProjects()
 {
     return $this->belongsToMany(Project::class, 'project_teams', 'user_id', 'project_id');

@@ -42,7 +42,7 @@
                         </div>
                     </div>
 
-
+ <!-- TOTAL TUGAS -->
             <div class="col-xl-3 col-md-6 mb-4">
                 <div class="card border-0 shadow-sm h-100 py-2 dashboard-card task-card">
                     <div class="card-body">
@@ -71,7 +71,7 @@
             </div>
 
 
-
+ <!-- TOTAL CATATAN -->
             <div class="col-xl-3 col-md-6 mb-4">
                 <div class="card border-0 shadow-sm h-100 py-2 dashboard-card note-card">
                     <div class="card-body">
@@ -100,7 +100,7 @@
             </div>
         </div>
 
-        <!-- Content Row -->
+        <!-- ROW CONTENT -->
         <div class="row">
             <!-- Recent Tasks -->
             <div class="col-xl-6 col-lg-6 mb-4">
@@ -142,7 +142,7 @@
             </div>
 
 
-            <!-- Recent Notes -->
+            <!-- CATATAN TERBARU -->
             <div class="col-xl-6 col-lg-6 mb-4">
                 <div class="card shadow-sm h-100">
                     <div class="card-header bg-white py-3 d-flex flex-row align-items-center justify-content-between border-bottom">
@@ -162,60 +162,6 @@
                                         <h6 class="mb-1 fw-bold">{{ Str::limit($note->title, 35) }}</h6>
                                         <p class="text-muted small mb-0">
                                             <strong>Konten:</strong> {{ Str::limit(strip_tags($note->content), 60) }}
-                                        </p>
-                                    </div>
-                                </div>
-                                @if(!$loop->last)
-                                    <hr class="my-2">
-                                @endif
-                            @endforeach
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Upcoming Reminders -->
-            <div class="col-xl-6 col-lg-6 mb-4">
-                <div class="card shadow-sm h-100">
-                    <div class="card-header bg-white py-3 d-flex flex-row align-items-center justify-content-between border-bottom">
-                        <h6 class="m-0 fw-bold text-warning">
-                            <i class="bi bi-bell me-2"></i>PENGINGAT MENDATANG
-                        </h6>
-                        <a href="{{ route('reminders.index') }}" class="text-decoration-none fw-bold text-warning small">LIHAT SEMUA <i class="bi bi-arrow-right ms-1"></i></a>
-                    </div>
-                    <div class="card-body">
-                        <div class="list-group list-group-flush">
-                            @foreach($upcomingReminders as $reminder)
-                                <div class="list-group-item border-0 px-0 py-3 d-flex align-items-center 
-                                    {{ $reminder->date->isToday() ? 'bg-warning bg-opacity-10' : 
-                                       ($reminder->date->isPast() ? 'bg-danger bg-opacity-10' : 'bg-success bg-opacity-10') }}">
-                                    <div class="rounded-circle p-2 me-3 d-flex align-items-center justify-content-center
-                                        {{ $reminder->date->isToday() ? 'bg-warning' : 
-                                           ($reminder->date->isPast() ? 'bg-danger' : 'bg-success') }}">
-                                        <i class="bi bi-clock text-white"></i>
-                                    </div>
-                                    <div class="flex-grow-1">
-                                        <div class="d-flex justify-content-between align-items-center mb-1">
-                                            <h6 class="mb-0 fw-bold">{{ Str::limit($reminder->title, 30) }}</h6>
-                                            <span class="badge fw-bold
-                                                {{ $reminder->date->isToday() ? 'bg-warning' : 
-                                                   ($reminder->date->isPast() ? 'bg-danger' : 'bg-success') }} rounded-pill">
-                                                {{ $reminder->date->format('d M') }} 
-                                                @if($reminder->time)
-                                                    {{ $reminder->time->format('H:i') }}
-                                                @endif
-                                            </span>
-                                        </div>
-                                        <p class="small mb-0 fw-bold
-                                            {{ $reminder->date->isToday() ? 'text-warning' : 
-                                               ($reminder->date->isPast() ? 'text-danger' : 'text-success') }}">
-                                            @if($reminder->date->isToday())
-                                                ⚡ <strong>HARI INI</strong>
-                                            @elseif($reminder->date->isPast())
-                                                ⚠️ <strong>TERLEWAT - {{ $reminder->date->diffForHumans() }}</strong>
-                                            @else
-                                                🗓️ <strong>{{ $reminder->date->diffForHumans() }}</strong>
-                                            @endif  
                                         </p>
                                     </div>
                                 </div>

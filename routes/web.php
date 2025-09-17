@@ -1,13 +1,9 @@
 <?php
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\ChecklistItemController;
-use App\Http\Controllers\FileController;
-use App\Http\Controllers\MailController;
 use App\Http\Controllers\NoteController;
 use App\Http\Controllers\ProjectController;
 use App\Http\Controllers\ProjectFileController;
-use App\Http\Controllers\ReminderController;
-use App\Http\Controllers\RoutineController;
 use App\Http\Controllers\TaskController;
 use App\Http\Controllers\Auth\RegisteredUserController;
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
@@ -51,42 +47,23 @@ Route::middleware(['auth'])->group(function () {
     Route::put('profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::put('profile/password', [ProfileController::class, 'updatePassword'])->name('profile.updatePassword');
 
-
-    Route::resource('routines', RoutineController::class)->except(['show']);
-    Route::get('routines/showAll', [RoutineController::class, 'showAll'])->name('routines.showAll');
-    Route::get('routines/daily', [RoutineController::class, 'showDaily'])->name('routines.showDaily');
-    Route::get('routines/weekly', [RoutineController::class, 'showWeekly'])->name('routines.showWeekly');
-    Route::get('routines/monthly', [RoutineController::class, 'showMonthly'])->name('routines.showMonthly');
-    Route::resource('files', FileController::class);
     Route::resource('notes', NoteController::class);
-    Route::resource('reminders', ReminderController::class);
     Route::resource('checklist-items', ChecklistItemController::class);
     Route::get('checklist-items/{checklistItem}/update-status', [ChecklistItemController::class, 'updateStatus'])->name('checklist-items.update-status');
     Route::get('/', function () {
         $user = Auth::user();
         $projectsCount = $user->projects()->count();
         $tasksCount = $user->tasks()->count();
-        $routinesCount = $user->routines()->count();
         $notesCount = $user->notes()->count();
-        $remindersCount = $user->reminders()->count();
-        $filesCount = $user->files()->count();
         $recentTasks = $user->tasks()->latest()->take(5)->get();
-        $todayRoutines = $user->routines()->whereDate('start_time', now())->get();
         $recentNotes = $user->notes()->latest()->take(5)->get();
-
-        $upcomingReminders = $user->reminders()->where('date', '>=', now())->orderBy('date')->take(5)->get();
 
         return view('dashboard', compact(
             'projectsCount',
             'tasksCount', 
-            'routinesCount', 
             'notesCount', 
-            'remindersCount',
-            'filesCount', 
             'recentTasks', 
-            'todayRoutines', 
             'recentNotes', 
-            'upcomingReminders'
         ));
     })->name('dashboard');
 });
